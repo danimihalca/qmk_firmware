@@ -66,6 +66,7 @@
 enum sofle_layers {
     _DEFAULTS = 0,
     _QWERTY = 0,
+    _QWERTY_MAC,
     _COLEMAK,
 	  _COLEMAKDH,
     _LOWER,
@@ -77,6 +78,7 @@ enum sofle_layers {
 
 enum custom_keycodes {
     KC_QWERTY = SAFE_RANGE,
+    KC_QWERTY_MAC,
     KC_COLEMAK,
 	  KC_COLEMAKDH,
     KC_LOWER,
@@ -85,6 +87,9 @@ enum custom_keycodes {
     KC_D_MUTE
 };
 
+// TODO: when addressing the other layers, double check if tranparency is needed
+// TODO: see how to access ADJUST layer, using both LT functions from thumb cluster does not work,
+// only from the outer deprecated columns (when performing RAISE + LOWER, not LOWER + RAISE due to transparency missing)
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
  * QWERTY
@@ -107,11 +112,40 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|------+-------+--------+--------+--------+------|                   |--------+-------+--------+--------+--------+---------|
   KC_LOWER,LT(_NUMPAD,KC_Q),KC_W,KC_E,KC_R,    KC_T,                      KC_Y,    KC_U,   KC_I,    KC_O,    KC_P,    KC_RAISE,
   //|------+-------+--------+--------+--------+------|                   |--------+-------+--------+--------+--------+---------|
-  KC_LSFT,LGUI_T(KC_A),LALT_T(KC_S),LSFT_T(KC_D),LCTL_T(KC_F),KC_G,      KC_H,RCTL_T(KC_J),RSFT_T(KC_K),LALT_T(KC_L),RGUI_T(KC_SCLN),KC_RSFT,
+  KC_LSFT,LGUI_T(KC_A),LALT_T(KC_S),LCTL_T(KC_D),LSFT_T(KC_F),KC_G,      KC_H,RSFT_T(KC_J),RCTL_T(KC_K),LALT_T(KC_L),RGUI_T(KC_SCLN),KC_RSFT,
   //|------+-------+--------+--------+--------+------|  ===  |   |  ===  |--------+-------+--------+--------+--------+---------|
   KC_LCTL,  KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,  KC_MUTE,  KC_D_MUTE,KC_N,    KC_M,   KC_COMM, KC_DOT,  KC_SLSH, KC_RCTL,
   //|------+-------+--------+--------+--------+------|  ===  |   |  ===  |--------+-------+--------+--------+--------+---------|
            KC_LGUI, KC_LALT, KC_ESC, LT(KC_LOWER,KC_TAB),KC_SPC,  KC_ENT,LT(KC_RAISE,KC_BSPC),KC_DEL,KC_RALT, KC_RGUI
+  //            \--------+--------+--------+---------+-------|   |--------+---------+--------+---------+-------/
+),
+
+/*
+ * QWERTY MAC
+ * ,-----------------------------------------.                    ,-----------------------------------------.
+ * |  `   |   1  |   2  |   3  |   4  |   5  |                    |   6  |   7  |   8  |   9  |   0  |  '   |
+ * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
+ * | LOWER|   Q  |   W  |   E  |   R  |   T  |                    |   Y  |   U  |   I  |   O  |   P  | RAISE|
+ * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
+ * |LShift|   A  |   S  |   D  |   F  |   G  |-------.    ,-------|   H  |   J  |   K  |   L  |   ;  |RShift|
+ * |------+------+------+------+------+------| MUTE  |    |DISCORD|------+------+------+------+------+------|
+ * | LCTR |   Z  |   X  |   C  |   V  |   B  |-------|    |-------|   N  |   M  |   ,  |   .  |   /  |RCTR  |
+ * `-----------------------------------------/       /     \      \-----------------------------------------'
+ *            | Opt  | Cmd  |ESC   | TAB  | /Space  /       \Enter \  |Bspc  |Del   | Cmd  | Opt  |
+ *            |      |      |      |      |/       /         \      \ |      |      |      |      |
+ *            `----------------------------------'           '------''---------------------------'
+ */
+  [_QWERTY_MAC] = LAYOUT(
+  //,------------------------------------------------.                    ,---------------------------------------------------.
+  KC_GRV,   KC_1,   KC_2,    KC_3,    KC_4,    KC_5,             LT(_SWITCH,KC_6), KC_7,   KC_8,    KC_9,    KC_0,    KC_QUOT,
+  //|------+-------+--------+--------+--------+------|                   |--------+-------+--------+--------+--------+---------|
+  KC_LOWER,LT(_NUMPAD,KC_Q),KC_W,KC_E,KC_R,    KC_T,                      KC_Y,    KC_U,   KC_I,    KC_O,    KC_P,    KC_RAISE,
+  //|------+-------+--------+--------+--------+------|                   |--------+-------+--------+--------+--------+---------|
+  KC_LSFT,LCTL_T(KC_A),LALT_T(KC_S),LGUI_T(KC_D),LSFT_T(KC_F),KC_G,      KC_H,RSFT_T(KC_J),RGUI_T(KC_K),LALT_T(KC_L),RCTL_T(KC_SCLN),KC_RSFT,
+  //|------+-------+--------+--------+--------+------|  ===  |   |  ===  |--------+-------+--------+--------+--------+---------|
+  KC_LCTL,  KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,  KC_MUTE,  KC_D_MUTE,KC_N,    KC_M,   KC_COMM, KC_DOT,  KC_SLSH, KC_RCTL,
+  //|------+-------+--------+--------+--------+------|  ===  |   |  ===  |--------+-------+--------+--------+--------+---------|
+           KC_LALT, KC_LGUI, KC_ESC, LT(KC_LOWER,KC_TAB),KC_SPC,  KC_ENT,LT(KC_RAISE,KC_BSPC),KC_DEL,KC_RGUI, KC_RALT
   //            \--------+--------+--------+---------+-------|   |--------+---------+--------+---------+-------/
 ),
 
@@ -235,7 +269,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |RGB_TOG|hue^ |sat ^ | bri ^|      |COLEMAK|-------.   ,-------|desk <|      |      |desk >|      |      |
  * |------+------+------+------+------+------|  MUTE |    |       |------+------+------+------+------+------|
- * | mode | hue dn|sat d|bri dn|      |QWERTY|-------|    |-------|      | PREV | PLAY | NEXT |      |      |
+ * | mode | hue dn|sat d|bri dn|QW_MAC|QWERTY|-------|    |-------|      | PREV | PLAY | NEXT |      |      |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
  *            | LGUI | LAlt | LCTR |LOWER | /Enter  /       \Space \  |RAISE | RCTR | RAlt | RGUI |
  *            |      |      |      |      |/       /         \      \ |      |      |      |      |
@@ -249,7 +283,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|------+-------+--------+--------+--------+------|                   |--------+-------+--------+--------+--------+---------|
   RGB_TOG, RGB_HUI,RGB_SAI, RGB_VAI, KC_COLEMAKDH,KC_COLEMAK,             C(G(KC_LEFT)),KC_NO,KC_NO,C(G(KC_RGHT)),XXXXXXX, XXXXXXX,
   //|------+-------+--------+--------+--------+------|  ===  |   |  ===  |--------+-------+--------+--------+--------+---------|
-  RGB_MOD, RGB_HUD,RGB_SAD, RGB_VAD, XXXXXXX,KC_QWERTY,XXXXXXX,   XXXXXXX, XXXXXXX, KC_MPRV, KC_MPLY, KC_MNXT, XXXXXXX, XXXXXXX,
+  RGB_MOD, RGB_HUD,RGB_SAD, RGB_VAD,KC_QWERTY_MAC,KC_QWERTY,XXXXXXX,   XXXXXXX, XXXXXXX, KC_MPRV, KC_MPLY, KC_MNXT, XXXXXXX, XXXXXXX,
   //|------+-------+--------+--------+--------+------|  ===  |   |  ===  |--------+-------+--------+--------+--------+---------|
                    _______, _______, _______, _______, _______,     _______, _______, _______, _______, _______
     //            \--------+--------+--------+---------+-------|   |--------+---------+--------+---------+-------/
@@ -286,7 +320,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------.                    ,-----------------------------------------.
  * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * | qwer | cole |col_dh| low  | raise| adj  |                    |numpad|      |      |      |      |QK_BOOT |
+ * |      | qwer |qw_mac| cole |col_dh| low  |                    | raise| adj  |numpad|      |      |QK_BOOT |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |      |      |      |      |      |      |-------.    ,-------|      |      |      |      |      |EE_CLR|
  * |------+------+------+------+------+------|  MUTE |    |       |------+------+------+------+------+------|
@@ -301,7 +335,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,------------------------------------------------.                    ,---------------------------------------------------.
   _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,XXXXXXX, XXXXXXX,
   //|------+-------+--------+--------+--------+------|                   |--------+-------+--------+--------+--------+---------|
-  TO(0),   TO(1),   TO(2),   TO(3),   TO(4),   TO(5),                      TO(6),   KC_NO,   KC_NO,   KC_NO,   KC_NO,   QK_BOOT,
+  KC_NO,   TO(0),   TO(1),   TO(2),   TO(3),   TO(4),                      TO(5),   TO(6),   TO(7),   KC_NO,   KC_NO,   QK_BOOT,
   //|------+-------+--------+--------+--------+------|                   |--------+-------+--------+--------+--------+---------|
   KC_NO,   KC_NO, KC_BRIU,   KC_NO,   KC_NO,   KC_NO,                      KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   EE_CLR,
   //|------+-------+--------+--------+--------+------|  ===  |   |  ===  |--------+-------+--------+--------+--------+---------|
@@ -483,6 +517,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 set_single_persistent_default_layer(_QWERTY);
             }
             return false;
+        case KC_QWERTY_MAC:
+            if (record->event.pressed) {
+                set_single_persistent_default_layer(_QWERTY_MAC);
+            }
+            return false;
         case KC_COLEMAK:
             if (record->event.pressed) {
                 set_single_persistent_default_layer(_COLEMAK);
@@ -543,6 +582,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 			switch (get_highest_layer(layer_state)) {
 				case _COLEMAK:
 				case _QWERTY:
+                case _QWERTY_MAC:
 				case _COLEMAKDH:
 					if (clockwise) {
 						tap_code(KC_PGDN);
