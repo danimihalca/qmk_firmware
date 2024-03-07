@@ -88,8 +88,6 @@ enum custom_keycodes {
 };
 
 // TODO: when addressing the other layers, double check if tranparency is needed
-// TODO: see how to access ADJUST layer, using both LT functions from thumb cluster does not work,
-// only from the outer deprecated columns (when performing RAISE + LOWER, not LOWER + RAISE due to transparency missing)
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
  * QWERTY
@@ -510,6 +508,10 @@ bool oled_task_user(void) {
 
 #endif
 
+layer_state_t layer_state_set_user(layer_state_t state) {
+  return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case KC_QWERTY:
@@ -535,19 +537,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case KC_LOWER:
             if (record->event.pressed) {
                 layer_on(_LOWER);
-                update_tri_layer(_LOWER, _RAISE, _ADJUST);
             } else {
                 layer_off(_LOWER);
-                update_tri_layer(_LOWER, _RAISE, _ADJUST);
             }
             return false;
         case KC_RAISE:
             if (record->event.pressed) {
                 layer_on(_RAISE);
-                update_tri_layer(_LOWER, _RAISE, _ADJUST);
             } else {
                 layer_off(_RAISE);
-                update_tri_layer(_LOWER, _RAISE, _ADJUST);
             }
             return false;
         case KC_ADJUST:
