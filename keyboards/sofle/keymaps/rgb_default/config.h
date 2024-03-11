@@ -31,6 +31,8 @@
 
 #define CUSTOM_LAYER_READ //if you remove this it causes issues - needs better guarding
 
+// Constant move for mouse keys
+#define MK_3_SPEED
 
 #define QUICK_TAP_TERM 0
 #ifdef TAPPING_TERM
