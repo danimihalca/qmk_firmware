@@ -3,7 +3,9 @@
 ## Editing
 
 Keymap is defined in `keymap.json` and can be edited via QMK Configurator, but using numbered layers instead of named ones (limitation from QMK Configurator). A `keymap.c` file will be generated automatically in the build process.
+
 Custom keycodes and common values shall be defined in 'sofle/sofle.h' which be included in the generated C keymap file.
+
 Custom logic shall be defined in `base_keymap.c`.
 
 ## Layers
@@ -70,8 +72,8 @@ Custom logic shall be defined in `base_keymap.c`.
 
 ![](layer_images/L4.svg)
 
+- layer locking
 - future improvements:
-    - [ ] layer locking
     - [ ] HRM (for selection etc)
     - [ ] next/previous word jump?
     - [ ] mouse hold/release?
