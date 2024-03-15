@@ -245,10 +245,105 @@ layer_state_t layer_state_set_user(layer_state_t state) {
   return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 }
 
+bool use_macos_mods_layout = false;
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (!process_layer_lock(keycode, record, CKC_LAYER_LOCK))
     {
         return false;
+    }
+
+    if (QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX)
+    {
+        int mod = QK_MOD_TAP_GET_MODS(keycode) + QK_USER;
+        int mod_keycode =QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
+        uprintf("KC: kc: 0x%04X, tap_count: %u, pressed: %u, mod: %u, mkc: %u\n", keycode, record->tap.count, record->event.pressed, mod, mod_keycode);
+
+        switch (mod)
+        {
+            case CKC_HRM_1:
+            {
+                uint16_t actual_mod = use_macos_mods_layout ? KC_LCTL : KC_LGUI;
+                if (!record->tap.count)
+                {
+                    if (record->event.pressed)
+                    {
+                        uprintf("register_code 16 %u\n", actual_mod);
+                        register_code16(actual_mod);
+                    }
+                    else
+                    {
+                        uprintf("register_code 16 %u\n", actual_mod);
+                        unregister_code16(actual_mod);
+                    }
+
+                }
+                else if (record->event.pressed)
+                {
+                    uprintf("tap_code 16 %u\n", mod_keycode);
+               tap_code16(mod_keycode);
+                }
+                return false;
+            }
+            case CKC_HRM_2:
+            {
+                int actual_mod = use_macos_mods_layout ? KC_LGUI : KC_LCTL;
+                if (record->tap.count)
+                {
+                    if (record->event.pressed)
+                    {
+                        uprintf("register_code 16 %u\n", actual_mod);
+                        register_code16(actual_mod);
+                    }
+                    else
+                    {
+                        uprintf("register_code 16 %u\n", actual_mod);
+                        unregister_code16(actual_mod);
+                    }
+                }
+                else if (record->event.pressed)
+                {
+                    uprintf("tap_code 16 %u\n", mod_keycode);
+                    tap_code16(mod_keycode);
+                }
+                return false;
+            }
+        }
+    }
+
+    switch (keycode) {
+        case CKC_MACOS_MODS_LAYOUT_TOGGLE:
+        {
+            use_macos_mods_layout = !use_macos_mods_layout;
+            return false;
+        }
+
+        case CKC_LM_1:
+        {
+            int actual_mod = use_macos_mods_layout ? KC_LALT : KC_LGUI;
+            if (record->event.pressed)
+            {
+                register_code16(actual_mod);
+            }
+            else
+            {
+                unregister_code16(actual_mod);
+            }
+            return false;
+        }
+        case CKC_LM_2:
+        {
+            int actual_mod = use_macos_mods_layout ? KC_LGUI : KC_LALT;
+            if (record->event.pressed)
+            {
+                register_code16(actual_mod);
+            }
+            else
+            {
+                unregister_code16(actual_mod);
+            }
+            return false;
+        }
     }
 
     return true;
