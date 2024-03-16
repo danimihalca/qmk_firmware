@@ -14,7 +14,6 @@ Custom logic shall be defined in `base_keymap.c`.
 
 ![](layer_images/L0.svg)
 
-- for Linux/Windows
 - QWERTY based
 - ,/< ./> '/" `/~ symbols only
 - GACS home row mods
@@ -26,25 +25,14 @@ Custom logic shall be defined in `base_keymap.c`.
 - pinky -1 row mod tap to Navigation Layer  
 - legacy number row
 - legacy SCGA mods on outer column / thumb cluster
-- future improvements:
-    - [ ] HRM & legacy mods wrappers (with system specific handling and switch) to replace Base Mac layer 
 
-### Base Mac layer / L1
+### Number layer / L1
 
 ![](layer_images/L1.svg)
 
-- mostly same as Base layer
-- for Mac
-- CAGS home row mods
-- legacy SCAG mod on outer column / thumb cluster
-
-### Number layer / L2
+### Symbol layer / L2
 
 ![](layer_images/L2.svg)
-
-### Symbol layer / L3
-
-![](layer_images/L3.svg)
 
 - inspired from https://sunaku.github.io/moergo-glove80-keyboard.html, adapted to a 3x5x2 layout and grouped in meaningful clusters
 - left hand:
@@ -68,23 +56,21 @@ Custom logic shall be defined in `base_keymap.c`.
     - !? : interrobang cluster
     - _ : clusterless
 
-### Navigation layer / L4
+### Navigation layer / L3
 
-![](layer_images/L4.svg)
+![](layer_images/L3.svg)
 
 - layer locking
 - future improvements:
-    - [ ] HRM (for selection etc)
     - [ ] next/previous word jump?
     - [ ] mouse hold/release?
 
-### Function layer / L5
+### Function layer / L4
+
+![](layer_images/L4.svg)
+
+### Adjust layer / L5
 
 ![](layer_images/L5.svg)
 
-- future improvements:
-    - [ ] HRM
-
-### Adjust layer / L6
-
-![](layer_images/L6.svg)
+- toggle to switch to Mac modifier layout with CAGS on home row mods (Ctrl-Gui swap) and SCAG mods on outer column / thumb cluster (Alt-Gui swap) on all layers where mods are used
