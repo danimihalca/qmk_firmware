@@ -269,17 +269,14 @@ void custom_mod_tap_handler(const keyrecord_t *record, int tap_keycode, int norm
     }
 }
 
-void custom_mod_handler(const keyrecord_t *record, int normal_mod, int mac_mod) {
-    uint16_t actual_mod = use_macos_mods_layout ? mac_mod : normal_mod;
+void custom_mod_handler(const keyrecord_t *record, int mod) {
     if (record->event.pressed)
     {
-        uprintf("register_code 16 %u\n", actual_mod);
-        register_code16(actual_mod);
+        register_code16(mod);
     }
     else
     {
-        uprintf("register_code 16 %u\n", actual_mod);
-        unregister_code16(actual_mod);
+        unregister_code16(mod);
     }
 }
 
@@ -289,22 +286,21 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
     }
 
-    if (QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX)
+    if (use_macos_mods_layout && IS_QK_MOD_TAP(keycode))
     {
-        int mod = QK_MOD_TAP_GET_MODS(keycode) + QK_USER;
-        int tap_keycode =QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
-        uprintf("KC: kc: 0x%04X, tap_count: %u, pressed: %u, mod: %u, mkc: %u\n", keycode, record->tap.count, record->event.pressed, mod, tap_keycode);
+        int mods = QK_MOD_TAP_GET_MODS(keycode);
 
-        switch (mod)
+        if (!record->tap.count)
         {
-            case CKC_HRM_1:
+            if (mods & MOD_MASK_CTRL)
             {
-                custom_mod_tap_handler(record, tap_keycode, KC_LGUI, KC_LCTL);
+                custom_mod_handler(record, KC_LGUI);
                 return false;
             }
-            case CKC_HRM_2:
+
+            if (mods & MOD_MASK_GUI)
             {
-                custom_mod_tap_handler(record, tap_keycode, KC_LCTL, KC_LGUI);
+                custom_mod_handler(record, KC_LCTL);
                 return false;
             }
         }
@@ -321,17 +317,21 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
         }
 
-        case CKC_LM_1:
+        case KC_LGUI:
         {
-            custom_mod_handler(record, KC_LGUI, KC_LALT);
-
-            return false;
+            if (use_macos_mods_layout)
+            {
+                custom_mod_handler(record, KC_LALT);
+                return false;
+            }
         }
-        case CKC_LM_2:
+        case KC_LALT:
         {
-            custom_mod_handler(record, KC_LALT, KC_LGUI);
-
-            return false;
+            if (use_macos_mods_layout)
+            {
+                custom_mod_handler(record, KC_LGUI);
+                return false;
+            }
         }
     }
 
