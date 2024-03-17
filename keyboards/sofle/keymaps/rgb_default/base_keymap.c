@@ -245,10 +245,72 @@ layer_state_t layer_state_set_user(layer_state_t state) {
   return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 }
 
+bool use_macos_mods_layout = false;
+
+void custom_mod_handler(const keyrecord_t *record, int mod) {
+    if (record->event.pressed)
+    {
+        register_code16(mod);
+    }
+    else
+    {
+        unregister_code16(mod);
+    }
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (!process_layer_lock(keycode, record, CKC_LAYER_LOCK))
     {
         return false;
+    }
+
+    if (use_macos_mods_layout && IS_QK_MOD_TAP(keycode))
+    {
+        int mods = QK_MOD_TAP_GET_MODS(keycode);
+
+        if (!record->tap.count)
+        {
+            if (mods & MOD_MASK_CTRL)
+            {
+                custom_mod_handler(record, KC_LGUI);
+                return false;
+            }
+
+            if (mods & MOD_MASK_GUI)
+            {
+                custom_mod_handler(record, KC_LCTL);
+                return false;
+            }
+        }
+    }
+
+    switch (keycode) {
+        case CKC_MACOS_MODS_LAYOUT_TOGGLE:
+        {
+            if (record->event.pressed)
+            {
+                use_macos_mods_layout = !use_macos_mods_layout;
+                uprintf("Switched mod layout to mac: %d\n", use_macos_mods_layout);
+            }
+            return false;
+        }
+
+        case KC_LGUI:
+        {
+            if (use_macos_mods_layout)
+            {
+                custom_mod_handler(record, KC_LALT);
+                return false;
+            }
+        }
+        case KC_LALT:
+        {
+            if (use_macos_mods_layout)
+            {
+                custom_mod_handler(record, KC_LGUI);
+                return false;
+            }
+        }
     }
 
     return true;
