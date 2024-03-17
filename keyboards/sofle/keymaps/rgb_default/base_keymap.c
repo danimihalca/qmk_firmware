@@ -247,28 +247,6 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
 bool use_macos_mods_layout = false;
 
-void custom_mod_tap_handler(const keyrecord_t *record, int tap_keycode, int normal_mod, int mac_mod) {
-    uint16_t actual_mod = use_macos_mods_layout ? mac_mod : normal_mod;
-    if (!record->tap.count)
-    {
-        if (record->event.pressed)
-        {
-            uprintf("register_code 16 %u\n", actual_mod);
-            register_code16(actual_mod);
-        }
-        else
-        {
-            uprintf("register_code 16 %u\n", actual_mod);
-            unregister_code16(actual_mod);
-        }
-    }
-    else if (record->event.pressed)
-    {
-        uprintf("tap_code 16 %u\n", tap_keycode);
-        tap_code16(tap_keycode);
-    }
-}
-
 void custom_mod_handler(const keyrecord_t *record, int mod) {
     if (record->event.pressed)
     {
