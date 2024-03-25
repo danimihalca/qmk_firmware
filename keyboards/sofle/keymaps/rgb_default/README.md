@@ -22,7 +22,7 @@ Custom logic shall be defined in `base_keymap.c`.
     - outer thumb to Function layer
     - middle thumb to Number layer
     - inner thumb to Symbol layer
-- pinky -1 row mod tap to Navigation Layer  
+- pinky -1 row mod tap to Navigation Layers 
 - legacy number row
 - legacy SCGA mods on outer column / thumb cluster
 
@@ -54,23 +54,30 @@ Custom logic shall be defined in `base_keymap.c`.
     - += : shifted top-down roll
     - \/ : slash cluster
     - !? : interrobang cluster
-    - _ : clusterless
+    - -_ : shifted top-down roll
 
-### Navigation layer / L3
+### Basic navigation + Numpad layer / L3
 
 ![](layer_images/L3.svg)
 
 - layer locking
 - future improvements:
     - [ ] next/previous word jump?
-    - [ ] mouse hold/release?
 
-### Function layer / L4
+## Mouse navigation layer / L4
 
 ![](layer_images/L4.svg)
 
-### Adjust layer / L5
+- layer locking
+- future improvements:
+    - [ ] mouse hold/release?
+
+### Function layer / L5
 
 ![](layer_images/L5.svg)
+
+### Adjust layer / L6
+
+![](layer_images/L6.svg)
 
 - toggle to switch to Mac modifier layout with CAGS on home row mods (Ctrl-Gui swap) and SCAG mods on outer column / thumb cluster (Alt-Gui swap) on all layers where mods are used
